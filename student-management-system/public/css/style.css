@@ -1,0 +1,8 @@
+.brand-link .brand-text {
+  white-space: normal;
+  display: block;
+  text-indent: -2px;
+  padding-left: 52px;
+  /* text-align: center; */
+  font-weight: bold;
+}
