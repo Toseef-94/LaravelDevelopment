@@ -15,16 +15,24 @@ use App\User;
 
 class UserController extends Controller
 {
-    public function register(request $request) 
-    {
-    return User::create([
-        'name' => $request['name'],
-        'email' => $request['email'],
-        'password' => Hash::make($request['password']),
-        'remember_token' => Str::random(60),
-    ]);
-   
-    }
+        public $successStatus = 200;
+        public function register(request $request) 
+        {
+        $validator = Validator::make($request->all(), 
+        [ 
+        'name' => 'required',
+        'email' => 'required|email',
+        'password' => 'required',  
+        ]);   
+        if ($validator->fails()) {          
+        return response()->json(['error'=>$validator->errors()], 401);                        }    
+        $input = $request->all();  
+        $input['password'] = bcrypt($input['password']);
+        $input['remember_token'] = Str::random(60);
+        $user = User::create($input); 
+        return response()->json(['user'=>$user], $this->successStatus);
+
+        }
 
         public function login(request $request) 
     {
