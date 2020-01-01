@@ -46,12 +46,6 @@ $rules = array(
 // run the validation rules on the inputs from the form
 $validator = Validator::make(Input::all(), $rules);
 
-// if the validator fails, redirect back to the form
-if ($validator->fails()) {
-    return Redirect::to('login')
-        ->withErrors($validator) // send back all errors to the login form
-        ->withInput(Input::except('password')); // send back the input (not the password) so that we can repopulate the form
-} else {
     $userdata = array(
         // 'name'     => Input::get('name'),
         'email'     => Input::get('email'),
@@ -62,7 +56,7 @@ if ($validator->fails()) {
     if (Auth::attempt($userdata)) {
 
 $respone = ['status'=>200,
-'msg'=>'Successfully loged in',
+'success'=>'Successfully loged in',
 'token'=>Auth::user()->remember_token,
 'user' => $userdata];
 
@@ -71,11 +65,10 @@ return json_encode($respone);
     //  echo "Successfully Login!!";
     } else {        
      $respone = ['status'=>500,
-    'msg'=>'Invalid credtials'];
+    'error'=>'Invalid credtials'];
       return json_encode($respone);
     }
-
-}
+ 
    
  
 }
